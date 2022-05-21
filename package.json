@@ -1,0 +1,35 @@
+{
+  "name": "new_proj",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/app.js",
+  "scripts": {
+    "serve": "webpack serve --mode development",
+    "build": "webpack --mode development",
+    "prod": "webpack --mode production",
+    "test": "node scripts/test.js",
+    "clean": "node scripts/clean.js"
+  },
+  "author": "Ollie",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/core": "^7.17.9",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-react": "^7.16.7",
+    "@mdx-js/loader": "^2.1.1",
+    "babel-loader": "^8.2.5",
+    "css-loader": "^6.7.1",
+    "directory-tree": "^3.2.2",
+    "raviger": "^4.1.0",
+    "raw-loader": "^4.0.2",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "sass": "^1.51.0",
+    "sass-loader": "^13.0.0",
+    "style-loader": "^3.3.1",
+    "terser-webpack-plugin": "^5.3.1",
+    "webpack": "^5.72.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.8.1"
+  }
+}
