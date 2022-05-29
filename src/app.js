@@ -8,12 +8,11 @@ function App(props){
 	let route = useRoutes(routes);
 
 	return(
-		<div>
+		<div className="main-view">
         {route}
 		</div>
 	);
 } 
 
-// document.body.style.backgroundColor = 'darkslateblue';
 const root = createRoot(document.getElementById('root'));
 root.render(<App/>);

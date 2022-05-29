@@ -3,15 +3,16 @@ import {Link} from 'raviger';
 import List from '/src/components/wob-components.js';
 const posts = [
     {
-        "path": "/home/ollie/Documents/site/mdxtest_2/src/site/posts/a.mdx",
+        "path": "/home/ollie/Documents/site/wob-static/src/site/posts/a.mdx",
         "name": "a.mdx",
-        "title": "dog in meadow",
+        "title": "PortAudio Wrapper",
         "linkmode": "static-max",
+        "date": "2019/07/05",
         "min": false,
         "route": "/posts/a"
     },
     {
-        "path": "/home/ollie/Documents/site/mdxtest_2/src/site/posts/b.mdx",
+        "path": "/home/ollie/Documents/site/wob-static/src/site/posts/b.mdx",
         "name": "b.mdx",
         "title": "egg",
         "linkmode": "title",
@@ -19,7 +20,7 @@ const posts = [
         "route": "/posts/b"
     },
     {
-        "path": "/home/ollie/Documents/site/mdxtest_2/src/site/posts/c.mdx",
+        "path": "/home/ollie/Documents/site/wob-static/src/site/posts/c.mdx",
         "name": "c.mdx",
         "title": "blepp",
         "linkmode": "title",
@@ -27,7 +28,7 @@ const posts = [
         "route": "/posts/c"
     },
     {
-        "path": "/home/ollie/Documents/site/mdxtest_2/src/site/posts/d.mdx",
+        "path": "/home/ollie/Documents/site/wob-static/src/site/posts/d.mdx",
         "name": "d.mdx",
         "title": "d",
         "linkmode": "title",
@@ -35,7 +36,7 @@ const posts = [
         "route": "/posts/d"
     },
     {
-        "path": "/home/ollie/Documents/site/mdxtest_2/src/site/posts/e.mdx",
+        "path": "/home/ollie/Documents/site/wob-static/src/site/posts/e.mdx",
         "name": "e.mdx",
         "title": "e",
         "linkmode": "title",

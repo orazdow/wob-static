@@ -4,14 +4,15 @@
   "description": "",
   "main": "src/app.js",
   "scripts": {
-    "serve": "webpack serve --mode development",
     "build": "webpack --mode development",
     "prod": "webpack --mode production",
+    "serve": "webpack serve --mode development",
+    "serv": "webpack serve --mode development --env nobuild",
     "test": "node scripts/test.js",
     "clean": "node scripts/clean.js"
   },
   "author": "Ollie",
-  "license": "MIT",
+  "license": "GPL3",
   "dependencies": {
     "@babel/core": "^7.17.9",
     "@babel/preset-env": "^7.16.11",

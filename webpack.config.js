@@ -10,7 +10,6 @@ async function buildFiles(){
 	await buildRoutes(baseroute);
 }
 
-// add babel target
 module.exports = (env, argv)=>{
  	let obj = {
 		entry: {
@@ -22,16 +21,15 @@ module.exports = (env, argv)=>{
 			filename: "main.js"
 		},
 		mode: argv.mode,
+		target: ['web', 'es6'],
 		plugins: [
 			(compiler) => {
-				compiler.hooks.beforeRun.tap("beforeRunCB", () => {					
-					buildFiles();
+				compiler.hooks.beforeRun.tap("beforeRunCB", () => {	
+					if(!env.nobuild) buildFiles();					
 				});
 			},
-			/*
-			new webpack.ProvidePlugin({React: 'react'}),
-			new webpack.ProvidePlugin({Link: ['raviger', 'Link']})
-			*/
+			// new webpack.ProvidePlugin({React: 'react'}),
+			// new webpack.ProvidePlugin({Link: ['raviger', 'Link']})
 		],
 		optimization: {
 			usedExports: true
@@ -40,9 +38,10 @@ module.exports = (env, argv)=>{
      		hot: true,
 			historyApiFallback: {index: '404.html'},
 			client: { logging: 'warn'},
-			onBeforeSetupMiddleware: (server)=>{
-				buildFiles();
-    		}
+   			setupMiddlewares: (middlewares, devServer) =>{
+   				if(!env.nobuild) buildFiles();
+   				return middlewares;
+   			}
     	},
 		module: {
 			rules: [
@@ -52,12 +51,16 @@ module.exports = (env, argv)=>{
 				    use: {
 				        loader: "babel-loader",
 				        options: {
-				        	presets: ["@babel/preset-env", "@babel/preset-react"]
+				        	presets: [
+				        	["@babel/preset-env",
+				        	{targets: {node: 16}}], 
+				        	"@babel/preset-react"
+				        	]
 				        }
 					}
 			    },
 				{
-				    test: /\.s[c]ss$/,
+				    test: /\.s?css$/,
 				    use: ['style-loader', 'css-loader', 'sass-loader']
 				},
 				{
@@ -88,7 +91,10 @@ module.exports = (env, argv)=>{
 
  	if(argv.mode === 'production'){
  		obj.optimization.minimize = true;
- 		obj.optimization.minimizer = [new TerserPlugin()];
+ 		obj.optimization.minimizer = [new TerserPlugin({
+      	extractComments: false,
+      	terserOptions: {format: {comments: false}},
+    })];
  	}else{
  		obj.devtool = "eval-cheap-source-map";
  	}

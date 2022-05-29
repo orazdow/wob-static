@@ -86,6 +86,7 @@ async function buildRoutes(baseroute){
 	let tree = dirTree(baseroute);
 	if(!tree){
 		console.log('Error: could not resolve', baseroute, '\n');
+		return;
 	}
 	dfs(tree.children, list, (el)=>{
 		let e = routeAsset(el, baseroute);

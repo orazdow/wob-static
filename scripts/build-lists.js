@@ -88,10 +88,22 @@ function initlists(path){
 	return a.filter(e => (e.name.split('.')[1]||'').toLowerCase()!= 'list');
 }
 
+function buildStr(liststr){
+	let str =''; 
+	let components = path.resolve('/src/components');
+	str += 'import React from \'react\';\nimport {Link} from \'raviger\';\n';
+	str += `import List from \'${components}/wob-components.js\';\n`;
+	str += 'const posts = '+liststr+';\n';
+	str += 'export default function f(props){\nreturn(<List list={posts}/>);\n}\n';
+	return str;
+}
+
 async function writeIndex(filepath, basepath){
 	let srcpath = filepath.substring(0,filepath.lastIndexOf('/'));
 	let destpath = filepath.replace('.list', '');
+	let destname = destpath.substring(destpath.lastIndexOf('/')+1);
 	let list = initlists(srcpath);
+	list = list.filter(el=>el.name != destname);
 	for(let el of list){
 		el = Object.assign(el, await getPragma(el.path));
 		el.route = el.path.substring(el.path.indexOf(basepath)+basepath.length);
@@ -105,6 +117,14 @@ async function writeIndex(filepath, basepath){
 	}
 	catch(err){
 		console.log(err);
+	}
+}
+
+function dfs(arr, cb){
+	for(let el of arr){		
+		cb(el)
+		if(el.children)
+			dfs(el.children, cb);
 	}
 }
 
@@ -125,24 +145,6 @@ async function buildLists(basepath){
 	for(let file of listfiles){
 		await writeIndex(file, basepath);
 	}
-}
-
-function dfs(arr, cb){
-	for(let el of arr){		
-		cb(el)
-		if(el.children)
-			dfs(el.children, cb);
-	}
-}
-
-function buildStr(liststr){
-	let str =''; 
-	let components = path.resolve('/src/components');
-	str += 'import React from \'react\';\nimport {Link} from \'raviger\';\n';
-	str += `import List from \'${components}/wob-components.js\';\n`;
-	str += 'const posts = '+liststr+';\n';
-	str += 'export default function f(props){\nreturn(<List list={posts}/>);\n}\n';
-	return str;
 }
 
 module.exports = buildLists;
