@@ -16,11 +16,11 @@ const styles = {
 
 export default function B(props){
 	return(
-		<div>
-		<p style={styles.p}> B </p>
-        <Link href="/" style={styles.link}>Home</Link>
-        <Link href="/A" style={styles.link}>A</Link>
-        <Link href="/C" style={styles.link}>C</Link>
+		<div className="container">
+		<p > B </p>
+        <Link href="/" >Home</Link>
+        <Link href="/A" >A</Link>
+        <Link href="/C" >C</Link>
         <a href="/"> yo</a>
         </div>
 	);

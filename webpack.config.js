@@ -48,7 +48,7 @@ module.exports = (env, argv)=>{
 			    {
 				    test: /\.m?js$/,
 				    exclude: /(node_modules)/,
-				    use: {
+				    use: [{
 				        loader: "babel-loader",
 				        options: {
 				        	presets: [
@@ -57,12 +57,15 @@ module.exports = (env, argv)=>{
 				        	"@babel/preset-react"
 				        	]
 				        }
-					}
+					},
+					path.resolve('./scripts/css2json.js')]
 			    },
+
 				{
 				    test: /\.s?css$/,
 				    use: ['style-loader', 'css-loader', 'sass-loader']
 				},
+				
 				{
 					test: /\.mdx?$/,
 		        	use: [

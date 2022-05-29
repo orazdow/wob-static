@@ -1,10 +1,7 @@
 $imgpath: "../img";
-$bkcolor: #fafafa;
+$bkcolor: #bbbbbb;
+// $bkcolor: #fafafa;
 // $bkcolor: darkslateblue;
-
-body,.container.main_div{
-    /*background-color: #fafafa;*/
-}
 
 body{
 	background-color:$bkcolor;
@@ -12,30 +9,75 @@ body{
 	color: #000000;
 	font-family: Helvetica,Arial,sans-serif;
 }
+.main-view{
+	z-index: 1;	
+	display: inline-block;
+	margin: auto;
+	width: 100%;
+}
 
-li{
-    list-style: none;
-     /*padding-right: 100px;*/
+.container{
+	display: inline-block;
+	width: 100%;
+	margin: auto;
+}
+
+.container > a, p{
+	width: 100%;
+	display: inherit;
+	text-align: center;
+	// margin-bottom: 1ch;
+}
+
+a{
+  color: black;
+  text-decoration: none;
+}
+
+a strong{
+  color: inherit;
+}
+
+a:hover{
+  text-decoration: underline;
+  color: blue;
 }
 
 ul{
     padding: 0px;
+    width: 55%;
+    margin: auto;
+}
+
+li{
+    list-style: none;
 }
 
 li.post-min:first-child{
     margin-top: 5em;
-    /*margin-top: 8%;*/
 }
-.min-heading{
+
+li.post-max{
+    padding: 5px;
+}
+
+.min{
+	text-align: left;
+}
+
+.min.heading{
     margin: 0px;
     margin-bottom: 3px;
 }
-.min-desc{
+.min.link{
+
+}
+.min.desc{
     margin: 0px;
     margin-top: 3px;
     color: #505050;
 }
-.min-date{
+.min.date{
     margin: 0px;
     margin-top: 3px;
     color: #505050;
@@ -56,38 +98,6 @@ li.post-min:first-child{
 .post-min:hover{
     cursor: pointer;
 }
-
-.main-view{
-    max-width: 51rem;
-    /*max-width: 50%;*/
-    margin-left: 28.5%;
-    margin-right: 30%;
-    padding: 21px;
-    z-index: 1;	
-}
-
-li.post-max{
-    padding: 5px;
-}
-
-a{
-  color: black;
-  text-decoration: none;
-}
-a strong{
-  color: inherit;
-}
-
-a:hover{
-  text-decoration: underline;
-}
-/*a:focus {
-  text-decoration: none;
-}
-a:active{
-  text-decoration: underline;
-}
-*/
 
 h1 {
   font-size: 2em;

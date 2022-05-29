@@ -1,5 +1,5 @@
 {
-  "name": "new_proj",
+  "name": "wob_static",
   "version": "1.0.0",
   "description": "",
   "main": "src/app.js",
@@ -25,6 +25,7 @@
     "raw-loader": "^4.0.2",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
+    "rehype-wrap": "^1.0.10",
     "sass": "^1.51.0",
     "sass-loader": "^13.0.0",
     "style-loader": "^3.3.1",
