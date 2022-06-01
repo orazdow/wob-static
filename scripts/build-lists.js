@@ -32,7 +32,8 @@ const proto = {
 	linkmode: ['title', 'card', 'expand', 'static-max', 'static-min'],
 	date: '',
 	description: '',
-	index: undefined
+	index: undefined,
+	keywords: ["a", "b", "c"]
 };
 
 
@@ -78,6 +79,9 @@ function validate(value, key, fstr){
 		break
 		case 'index':
 		break;
+		case 'keywords':
+			value = JSON.parse(value);
+		break;
 	}
 	return value;
 }
@@ -94,7 +98,8 @@ function buildStr(liststr){
 	str += 'import React from \'react\';\nimport {Link} from \'raviger\';\n';
 	str += `import List from \'${components}/wob-components.js\';\n`;
 	str += 'const posts = '+liststr+';\n';
-	str += 'export default function f(props){\nreturn(<List list={posts}/>);\n}\n';
+	str += 'export default function f(props){\n';
+	str += 'return(<List list={posts} category={props.category}/>);\n}\n'
 	return str;
 }
 
@@ -103,7 +108,7 @@ async function writeIndex(filepath, basepath){
 	let destpath = filepath.replace('.list', '');
 	let destname = destpath.substring(destpath.lastIndexOf('/')+1);
 	let list = initlists(srcpath);
-	list = list.filter(el=>el.name != destname);
+	list = list.filter(el=>el.name != destname && (el.name.split('.')[0]||'').toLowerCase()!= 'index');
 	for(let el of list){
 		el = Object.assign(el, await getPragma(el.path));
 		el.route = el.path.substring(el.path.indexOf(basepath)+basepath.length);

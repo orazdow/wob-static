@@ -5,10 +5,10 @@
   "main": "src/app.js",
   "scripts": {
     "build": "webpack --mode development",
-    "prod": "webpack --mode production",
+    "prod":  "webpack --mode production",
     "serve": "webpack serve --mode development",
-    "serv": "webpack serve --mode development --env nobuild",
-    "test": "node scripts/test.js",
+    "serv":  "webpack serve --mode development --env nobuild",
+    "test":  "node scripts/test.js",
     "clean": "node scripts/clean.js"
   },
   "author": "Ollie",

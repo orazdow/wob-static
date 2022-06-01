@@ -29,6 +29,27 @@ body{
 	// margin-bottom: 1ch;
 }
 
+.fakelink{
+	color: black;
+	text-decoration: none;
+	cursor:pointer;
+}
+
+.fakelink:hover{
+	color: blue;
+	text-decoration: underline;
+}
+
+.sidemenu{
+	// display: flex;
+	float: left;
+	padding-left:8px;
+	padding-top:8px;
+}
+.sidemenu > li{
+	width: 20px;
+}
+
 a{
   color: black;
   text-decoration: none;
@@ -39,14 +60,15 @@ a strong{
 }
 
 a:hover{
-  text-decoration: underline;
   color: blue;
+  text-decoration: underline;
 }
 
 ul{
     padding: 0px;
     width: 55%;
     margin: auto;
+    padding-top: 3em;
 }
 
 li{
@@ -54,7 +76,7 @@ li{
 }
 
 li.post-min:first-child{
-    margin-top: 5em;
+    // margin-top: 2em;
 }
 
 li.post-max{

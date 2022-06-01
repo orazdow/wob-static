@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {Link} from 'raviger';
 
 function Post(props){
@@ -14,16 +14,47 @@ function Post(props){
     );
 }
 
+function filter(list, category) {
+    return list.filter(el =>
+        el.keywords && el.keywords.includes(category)
+    );
+}
+
 function List(props){
-	
-	const list = props.list.map((el) =>{ 
+
+	const arr = props.category ? 
+		filter(props.list, props.category) : props.list;
+
+	const list = arr.map((el) =>{ 
 		return <Post key={el.title} post={el}/>
 	});
 
 	return(
-       <ul>{list}</ul>
+		<ul>{list}</ul>
 	);
 }
 
+function Selector({children, Menu, hash}){
+	useEffect(()=>{
+		window.addEventListener('hashchange', event => { 
+			setCategory(event.target.location.hash.substr(1)||'');
+		});
+	},[]);
 
-export{List as default, Post}
+	const [cat, setCategory] = useState(window.location.hash.substr(1)||'');
+
+	const cb = (event) => {
+		let val = event.target.getAttribute('value');
+		setCategory(val);
+		if(hash) window.location.hash = val;
+	}
+
+	return(
+		<div>
+		<Menu onclick={cb}/>
+		{React.cloneElement(children, {category:cat})}
+		</div>
+	);
+}
+
+export{List as default, Post, Selector}
