@@ -1,7 +1,7 @@
 $imgpath: "../img";
-$bkcolor: #bbbbbb;
+$bkcolor: #fff;
+$pre-bkcolor: #f9f9f9;
 // $bkcolor: #fafafa;
-// $bkcolor: darkslateblue;
 
 body{
 	background-color:$bkcolor;
@@ -16,17 +16,31 @@ body{
 	width: 100%;
 }
 
-.container{
-	display: inline-block;
+.center{
+	display: block;
 	width: 100%;
 	margin: auto;
 }
 
-.container > a, p{
+.center > *{
 	width: 100%;
-	display: inherit;
+	display: block;
 	text-align: center;
-	// margin-bottom: 1ch;
+}
+
+.markdown-content{
+	margin: auto;
+	max-width: 35rem;
+	padding: 2em;
+    margin-left: 28%;
+    margin-right: 29%;
+
+}
+
+.markdown-content pre{
+	background-color: $pre-bkcolor;
+	padding: 1rem;
+	white-space: pre-wrap;
 }
 
 .fakelink{
@@ -41,7 +55,6 @@ body{
 }
 
 .sidemenu{
-	// display: flex;
 	float: left;
 	padding-left:8px;
 	padding-top:8px;
@@ -66,7 +79,7 @@ a:hover{
 
 ul{
     padding: 0px;
-    width: 55%;
+    width: 54vw;
     margin: auto;
     padding-top: 3em;
 }
@@ -120,6 +133,42 @@ li.post-max{
 .post-min:hover{
     cursor: pointer;
 }
+
+h1,h2,h3,h4,h5,h6 {
+margin-bottom:.3em;
+line-height:1.25;
+color:#000000;
+text-rendering:optimizeLegibility
+}
+
+code,pre {
+font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace
+}
+
+code {
+padding:.25em .5em;
+font-size:85%;
+background-color:$pre-bkcolor
+}
+
+pre {
+margin-top:0;
+margin-bottom:1em;
+font-size:.8em
+}
+
+pre code {
+padding:0;
+font-size:100%;
+}
+
+blockquote {
+padding:.5em 1em;
+margin:.8rem 0;
+color:#7a7a7a;
+border-left:.25em solid #e5e5e5
+}
+
 
 h1 {
   font-size: 2em;

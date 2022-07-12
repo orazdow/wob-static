@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const path = require( 'path' );
 const TerserPlugin = require('terser-webpack-plugin');
+const rehypeWrap = require('rehype-wrap');
 const buildRoutes = require("./scripts/build-routes");
 const buildLists = require("./scripts/build-lists");
 const baseroute = path.resolve('src/site');
@@ -48,7 +49,7 @@ module.exports = (env, argv)=>{
 			    {
 				    test: /\.m?js$/,
 				    exclude: /(node_modules)/,
-				    use: [{
+				    use: {
 				        loader: "babel-loader",
 				        options: {
 				        	presets: [
@@ -57,15 +58,12 @@ module.exports = (env, argv)=>{
 				        	"@babel/preset-react"
 				        	]
 				        }
-					},
-					path.resolve('./scripts/css2json.js')]
+					}
 			    },
-
 				{
 				    test: /\.s?css$/,
 				    use: ['style-loader', 'css-loader', 'sass-loader']
 				},
-				
 				{
 					test: /\.mdx?$/,
 		        	use: [
@@ -73,17 +71,21 @@ module.exports = (env, argv)=>{
 			        		loader: '@mdx-js/loader',
 			        		options: {
 			        			mdxExtensions: ['.md'],
-			        			format: 'mdx'
+			        			format: 'mdx',
+			        			rehypePlugins: [[rehypeWrap, {
+			        				wrapper: '.markdown-content',
+			        			}]]
 			        		}
 		        		},
-		        			path.resolve('./scripts/css2json.js'),
+		        			path.resolve('./scripts/html2jsx.js'),
 		        		{
 		        			loader: path.resolve('./scripts/addimport.js'),
 		        			options: {		        			
 	        					module: 'Link',
 	        					source: 'raviger',
 	        					named: true,
-	        					enabled: true
+	        					enabled: true,
+	        					test: /<\s*?Link/gm
 		        			}
 		        		}
 		        	]

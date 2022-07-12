@@ -44,9 +44,9 @@ function Selector({children, Menu, hash}){
 	const [cat, setCategory] = useState(window.location.hash.substr(1)||'');
 
 	const cb = (event) => {
-		let val = event.target.getAttribute('value');
-		setCategory(val);
+		let val = event.target.getAttribute('value')||'';
 		if(hash) window.location.hash = val;
+		else setCategory(val);
 	}
 
 	return(

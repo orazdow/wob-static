@@ -113,6 +113,7 @@ async function writeIndex(filepath, basepath){
 		el = Object.assign(el, await getPragma(el.path));
 		el.route = el.path.substring(el.path.indexOf(basepath)+basepath.length);
 		el.route = el.route.substring(0,el.route.lastIndexOf('.'));
+		delete el.path;
 	}
 	let str = JSON.stringify(list, null, 4);
 	let s = buildStr(str);

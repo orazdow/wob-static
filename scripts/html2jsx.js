@@ -1,5 +1,11 @@
-// inline style, class attribute to jsx
-function toJSX(str){
+function emptyElToJSX(str){
+	const reg = /<\s*(br|hr|wbr|input|source|track|img|embed)[^>]*((?<!\/\s*?)>)/gm;
+	return str.replace(reg, (match, p1, p2)=>{
+    	return match.replace(p2,'/>');
+	});
+}
+
+function cssToJSX(str){
 	let s = str.replace(/style\s*?=\s*?"(.*?)"/g, (match)=>{    
 	    let arr = match.match(/(?<=")(.*?)(?=")/)[0].split(';').filter(s=>s.length>1);
 	    arr = arr.map(el => el.split(':').map(el => el.replace(' ','')));
@@ -11,7 +17,12 @@ function toJSX(str){
 	return s.replace(/class\s*?=/g, 'className=');
 }
 
-// not used (for html-import)
+function toJSX(str){
+	str = emptyElToJSX(str);
+	return cssToJSX(str);
+}
+
+// not used: (for html-import-loader)
 function removeTag(str, tag){
     let _o = '(<'+tag+'[^>]*>)';
     let _c = '(<\/'+tag+'[^>]*>)';
