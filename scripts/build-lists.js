@@ -114,6 +114,7 @@ async function writeIndex(filepath, basepath){
 		el.route = el.path.substring(el.path.indexOf(basepath)+basepath.length);
 		el.route = el.route.substring(0,el.route.lastIndexOf('.'));
 		delete el.path;
+		// el.datetime = parseDate(el.date);
 	}
 	let str = JSON.stringify(list, null, 4);
 	let s = buildStr(str);
