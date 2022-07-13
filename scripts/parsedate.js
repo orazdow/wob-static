@@ -13,13 +13,13 @@
 	  epoch: 1565021700000,
 	  err: null
 	}
-	or {err: errs_msg}
+	or {err: err_msg}
 
 	'' 
 	returns: {epoch: 0}
 */
 
-export default function parseDate(s){
+function parseDate(s){
     let d_err = 'incorrect date: expected mm/dd/yyyy or yyyy/mm/dd';
     if(!s) return {epoch: 0};
     let fields = {};
@@ -77,3 +77,5 @@ export default function parseDate(s){
     }
     return ret;    
 }
+
+module.exports = parseDate;

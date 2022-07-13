@@ -1,6 +1,7 @@
 const dirTree = require("directory-tree");
 const fs = require('node:fs');
 const path = require('node:path');
+const parseDate = require('./parsedate.js');
 
 
 /*
@@ -47,7 +48,14 @@ async function getPragma(path){
 	};
 	if(m){
 		let a = m[0].split('\n').filter(s => s.includes(':'));
-		a = a.map(s => s.replace(/[\x00-\x1F\x7F]/, '')).map(s => s.split(':').map(s => s.trim()));
+		a = a.map(s => s.replace(/[\x00-\x1F\x7F]/, ''));
+		a = a.map((s)=>{
+			let _a = s.split(':');
+			if(_a.length > 2){
+				_a = [_a[0], _a.slice(1).join(':')];
+			}
+			return _a.map(s => s.trim());
+		});
 		let keys = Object.keys(proto);
 		for(let el of a){
 			let prop = el[0].toLowerCase();
@@ -103,6 +111,18 @@ function buildStr(liststr){
 	return str;
 }
 
+function SortList(a, b){
+	if(a.timecode > b.timecode){
+		return -1
+	}
+	else if(a.timecode < b.timecode){
+		return 1
+	}
+	else{
+		return a.title.localeCompare(b.title);
+	}
+}
+
 async function writeIndex(filepath, basepath){
 	let srcpath = filepath.substring(0,filepath.lastIndexOf('/'));
 	let destpath = filepath.replace('.list', '');
@@ -113,9 +133,12 @@ async function writeIndex(filepath, basepath){
 		el = Object.assign(el, await getPragma(el.path));
 		el.route = el.path.substring(el.path.indexOf(basepath)+basepath.length);
 		el.route = el.route.substring(0,el.route.lastIndexOf('.'));
+		let d = parseDate(el.date);
+		if(d.err) console.log(el.title, d.err);
+		el.timecode = d.epoch || 0;
 		delete el.path;
-		// el.datetime = parseDate(el.date);
 	}
+	list.sort(SortList);
 	let str = JSON.stringify(list, null, 4);
 	let s = buildStr(str);
 	try{
