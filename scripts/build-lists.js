@@ -1,7 +1,7 @@
 const dirTree = require("directory-tree");
 const fs = require('node:fs');
 const path = require('node:path');
-const {parseDate, sortList} = require('./parsedate.js');
+const {parseDate, sortList, overrideIndices} = require('./parsedate.js');
 
 
 /*
@@ -127,6 +127,7 @@ async function writeIndex(filepath, basepath){
 		delete el.path;
 	}
 	list.sort(sortList);
+	overrideIndices(list);
 	let str = JSON.stringify(list, null, 4);
 	let s = buildStr(str);
 	try{

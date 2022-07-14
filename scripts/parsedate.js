@@ -112,8 +112,37 @@ function sort(a, b){
 	}
 }
 
+// rearrange list with index field overrides if present
+function overrideIndices(arr){
+    let copy = arr.map(e=>e);
+    let list = [];
+    for(let e of arr){
+        if(e.index || e.index === 0)
+            list.push(e);
+    }
+    let len = list.length;
+    if(len == 0) return;
+    for(let i = 0; list.length > 0 && i < 100; i++){
+        let e = list.pop();
+        let _i = copy.findIndex((el)=>{
+            return el.title == e.title && el.route == e.route;
+        });
+        if(_i >= 0){
+            copy.splice(_i, 1);
+            copy.splice(e.index, 0, e);
+        }
+    }
+    if(copy.length === arr.length){
+        arr.forEach((e, i)=>{
+            arr[i] = copy[i];
+        });
+        console.log('overrode', len, 'indices');
+    }
+}
+
 
 module.exports = {
 	parseDate: parseDate,
-	sortList: sort
+	sortList: sort,
+	overrideIndices: overrideIndices
 }
