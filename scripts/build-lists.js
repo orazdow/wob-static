@@ -1,7 +1,7 @@
 const dirTree = require("directory-tree");
 const fs = require('node:fs');
 const path = require('node:path');
-const parseDate = require('./parsedate.js');
+const {parseDate, sortList} = require('./parsedate.js');
 
 
 /*
@@ -111,18 +111,6 @@ function buildStr(liststr){
 	return str;
 }
 
-function SortList(a, b){
-	if(a.timecode > b.timecode){
-		return -1
-	}
-	else if(a.timecode < b.timecode){
-		return 1
-	}
-	else{
-		return a.title.localeCompare(b.title);
-	}
-}
-
 async function writeIndex(filepath, basepath){
 	let srcpath = filepath.substring(0,filepath.lastIndexOf('/'));
 	let destpath = filepath.replace('.list', '');
@@ -138,7 +126,7 @@ async function writeIndex(filepath, basepath){
 		el.timecode = d.epoch || 0;
 		delete el.path;
 	}
-	list.sort(SortList);
+	list.sort(sortList);
 	let str = JSON.stringify(list, null, 4);
 	let s = buildStr(str);
 	try{

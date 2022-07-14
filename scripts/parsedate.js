@@ -19,6 +19,18 @@
 	returns: {epoch: 0}
 */
 
+/*
+	global list sorting options:
+	date_priority: (true )sort dates at top of list
+	date_descending: (true) most recent at top
+	alpha descending: reversed alpha
+*/
+const sort_options = {
+	date_priority: true,
+	date_descending: true,
+	alpha_descending: false
+}
+
 function parseDate(s){
     let d_err = 'incorrect date: expected mm/dd/yyyy or yyyy/mm/dd';
     if(!s) return {epoch: 0};
@@ -78,4 +90,30 @@ function parseDate(s){
     return ret;    
 }
 
-module.exports = parseDate;
+
+function sort(a, b){ 
+	let adesc = sort_options.alpha_descending;
+	let ddesc = sort_options.date_descending;
+	let dpriority = sort_options.date_priority;
+	let r = adesc ? 
+		b.title.localeCompare(a.title) : a.title.localeCompare(b.title);
+	if(r !== 0 && !dpriority) 
+		return r;
+	else{
+		if(a.timecode > b.timecode){
+			if(ddesc) return -1
+			else return (dpriority && b.timecode > 0) ? 1 : -1
+		} 
+		else if(a.timecode < b.timecode){
+			if(ddesc) return 1
+			else return (dpriority && a.timecode > 0) ? -1 : 1
+		}
+		else return r;
+	}
+}
+
+
+module.exports = {
+	parseDate: parseDate,
+	sortList: sort
+}
