@@ -7,6 +7,7 @@ export default function Home(props){
 		<p>hii</p>
 		<Link href="/a" >A</Link>
 		<Link href="/b" >B</Link>
+		<Link href="/f" >F</Link>
 		<Link href="/posts" >Posts</Link>
 		</div>
 	);

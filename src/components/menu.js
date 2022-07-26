@@ -1,7 +1,8 @@
 import React from 'react';
 import {Link} from 'raviger';
 
-function Menu({links}){
+export default function Menu({links}){
+
 	const items = links.map((el, i)=>{
 		return el ? i === 0 ? 
 			<Link href={el.path} key={'m'+i}>
@@ -14,7 +15,6 @@ function Menu({links}){
 			</span>
 			</Link> : null;
 	});
-	return(<div className="menu">{items}</div>);
-}
 
-export default Menu;
+	return (<div className="menu">{items}</div>);
+}

@@ -5,6 +5,7 @@ import B from '/home/ollie/Documents/site/wob-static/src/site/b.js';
 import Index_c from '/home/ollie/Documents/site/wob-static/src/site/c/c.index.mdx';
 import D from '/home/ollie/Documents/site/wob-static/src/site/c/d.mdx';
 import E from '/home/ollie/Documents/site/wob-static/src/site/c/e.mdx';
+import F from '/home/ollie/Documents/site/wob-static/src/site/f.js';
 import Index from '/home/ollie/Documents/site/wob-static/src/site/index.js';
 import A_posts from '/home/ollie/Documents/site/wob-static/src/site/posts/a.mdx';
 import B_posts from '/home/ollie/Documents/site/wob-static/src/site/posts/b.mdx';
@@ -20,6 +21,7 @@ const routes = {
     '/c': () => <Index_c/>,
     '/c/d': () => <D/>,
     '/c/e': () => <E/>,
+    '/f*': () => <F/>,
     '/': () => <Index/>,
     '/posts/a': () => <A_posts/>,
     '/posts/b': () => <B_posts/>,
