@@ -114,7 +114,6 @@ function sort(a, b){
 
 // rearrange list with index field overrides if present
 function overrideIndices(arr){
-    let copy = arr.map(e=>e);
     let list = [];
     for(let e of arr){
         if(e.index || e.index === 0)
@@ -122,6 +121,7 @@ function overrideIndices(arr){
     }
     let len = list.length;
     if(len == 0) return;
+    let copy = arr.map(e=>e);
     for(let i = 0; list.length > 0 && i < 100; i++){
         let e = list.pop();
         let _i = copy.findIndex((el)=>{

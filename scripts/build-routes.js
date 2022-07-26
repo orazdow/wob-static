@@ -65,10 +65,45 @@ function check(list){
 	return a;
 }
 
+async function checkTemplates(list, baseroute){
+	let templates = {}, found =[];
+	for(let el of list){
+		let str = await fs.promises.readFile(el.path, 'utf8');
+		let m = str.match(/(?<=@template)(.+?)(?=\*\/)/gsmi);
+		if(m && m[0]){
+			let s = m[0].trim();
+			if(found.findIndex((str)=>{return str == s;}) < 0){
+				if(s.endsWith('.js')||s.endsWith('.mdx')){
+					let _i = baseroute.search('src');
+					if(_i > 0){
+						let dir = baseroute.substring(0, _i+3)+'/components/'+s;
+						let name = 'Tmp_'+s.substring(0, s.lastIndexOf('.'));
+						templates[s] = {name:name, path:dir};
+						found.push(s);
+						el.template = name;
+					}
+				}
+			}else{ 
+				el.template = templates[s].name;
+			}
+		}
+		m = str.match(/(?<=@endpoint)(.+?)(?=\*\/)/gsmi);
+		if(m && m[0]){
+			let s = m[0].trim();
+			console.log('\n@endpoint: overriding route', el.route+' -> '+s);
+			el.route = s;
+		}
+	}
+	let a = Object.values(templates);
+	return a.length? a : undefined;
+}
+
 function routeStr(list){
 	let str = '';
 	for(let el of list){
-		str += `    '${el.route}': () => <${el.name}/>,\n`;
+		str += el.template ? 
+		`    '${el.route}': () => <${el.template}><${el.name}/></${el.template}>,\n` :
+		`    '${el.route}': () => <${el.name}/>,\n`;
 	}
 	return `const routes = {\n${str}};`
 }
@@ -94,6 +129,8 @@ async function buildRoutes(baseroute){
 	});
 	let a = check(list);
 	let import_str = importStr(a);
+	let templates = await checkTemplates(a, baseroute);
+	if (templates) import_str += importStr(templates);
 	let route_str = routeStr(a);
 	let str = 'import React from \'react\';\n\n'+import_str+'\n'+route_str+'\n\nexport default routes;';
 	try{

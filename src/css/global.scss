@@ -14,6 +14,7 @@ body{
 	display: inline-block;
 	margin: auto;
 	width: 100%;
+	padding: 18px;
 }
 
 .center{
@@ -52,6 +53,36 @@ body{
 .fakelink:hover{
 	color: blue;
 	text-decoration: underline;
+}
+
+.center-margin{
+	margin-left: 28%;
+	margin-right: 28%;
+	padding: 21px;
+}
+
+.menu{
+	width: 100%;
+	display: inline-block;
+	// border: 1px solid black;
+
+}
+
+.menu > a{
+	margin-right: 30px;
+	color: #505050;
+	// margin-right: 30px;
+	// margin-left: 30px;
+}
+
+.menu-title{
+	font-weight: 700;
+	font-size: 24px;
+}
+
+.menu-sub{
+	font-weight: 400;
+	font-size: 18px;
 }
 
 .sidemenu{

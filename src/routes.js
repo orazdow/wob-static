@@ -12,6 +12,7 @@ import C from '/home/ollie/Documents/site/wob-static/src/site/posts/c.mdx';
 import D_posts from '/home/ollie/Documents/site/wob-static/src/site/posts/d.mdx';
 import E_posts from '/home/ollie/Documents/site/wob-static/src/site/posts/e.mdx';
 import Index_posts from '/home/ollie/Documents/site/wob-static/src/site/posts/index.js';
+import Tmp_template from '/home/ollie/Documents/site/wob-static/src/components/template.js';
 
 const routes = {
     '/a': () => <A/>,
@@ -25,7 +26,7 @@ const routes = {
     '/posts/c': () => <C/>,
     '/posts/d': () => <D_posts/>,
     '/posts/e': () => <E_posts/>,
-    '/posts': () => <Index_posts/>,
+    '/posts': () => <Tmp_template><Index_posts/></Tmp_template>,
 };
 
 export default routes;

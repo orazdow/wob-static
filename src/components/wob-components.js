@@ -35,9 +35,9 @@ function List(props){
 }
 
 function Selector({children, Menu, hash}){
-	useEffect(()=>{
-		window.addEventListener('hashchange', event => { 
-			setCategory(event.target.location.hash.substr(1)||'');
+	useEffect(()=>{		
+		window.addEventListener('popstate', event => { 
+			setCategory(window.location.hash.substr(1)||'');
 		});
 	},[]);
 

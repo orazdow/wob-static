@@ -1,6 +1,7 @@
 import React from 'react';
 import List from './list.js';
 import {Selector} from '../../components/wob-components.js';
+{/*@template template.js*/}
 
 function SelectMenu({onclick}){
 	return(
