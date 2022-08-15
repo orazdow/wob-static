@@ -1,19 +1,20 @@
 import React from 'react';
 import {Link} from 'raviger';
 import List from '/src/components/wob-components.js';
+
 const posts = [
     {
         "name": "a.mdx",
         "title": "PortAudio Wrapper",
-        "linkmode": "static-max",
+        "linkmode": "title",
         "date": "2019/07/05 2:15pm",
         "keywords": [
             "a",
             "b"
         ],
-        "min": false,
+        "min": true,
         "route": "/posts/a",
-        "timecode": 1562350500000
+        "timecode": 1562361300000
     },
     {
         "name": "d.mdx",
@@ -22,7 +23,7 @@ const posts = [
         "date": "2019/07/05 2:00 pm",
         "min": true,
         "route": "/posts/d",
-        "timecode": 1562349600000
+        "timecode": 1562360400000
     },
     {
         "name": "c.mdx",
@@ -49,6 +50,7 @@ const posts = [
         "timecode": 0
     }
 ];
+
 export default function f(props){
-return(<List list={posts} category={props.category}/>);
+    return(<List list={posts} category={props.category}/>);
 }

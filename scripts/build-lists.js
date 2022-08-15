@@ -38,12 +38,11 @@ const proto = {
 };
 
 
-async function getPragma(path){
-	let str = await fs.promises.readFile(path, 'utf8');
-	let fstr = path.substring(path.lastIndexOf('/')+1);
+async function getPragma(el){
+	let str = await fs.promises.readFile(el.path, 'utf8');
 	let m = str.match(/(?<=@pragma)(.+?)(?=\*\/)/gsmi);
 	let o = {
-		title: validate('', 'title', fstr),
+		title: validate('', 'title', el),
 		linkmode: 'title'
 	};
 	if(m){
@@ -57,10 +56,10 @@ async function getPragma(path){
 			return _a.map(s => s.trim());
 		});
 		let keys = Object.keys(proto);
-		for(let el of a){
-			let prop = el[0].toLowerCase();
+		for(let e of a){
+			let prop = e[0].toLowerCase();
 			if(keys.includes(prop)){
-				o[prop] = validate(el[1], prop, fstr);
+				o[prop] = validate(e[1], prop, el);
 			}else{
 				console.log('unrecognized pragma key:', prop, '-', fstr);
 			}
@@ -70,15 +69,38 @@ async function getPragma(path){
 	return o;
 }
 
-function validate(value, key, fstr){
+async function getOverride(path){
+	try{
+		let str = await fs.promises.readFile(path, 'utf8');
+		let m = str.match(/(?<=@override)(.+?)(?=\*\/)/gsmi);
+		if(m){
+			let a = m[0].split('\n').filter(s => s.includes(':'));
+			a = a.map(s => s.replace(/[\x00-\x1F\x7F]/, ''));
+			a = a.map((s)=>{
+				let _a = s.split(':');
+				if(_a.length > 2){
+					_a = [_a[0], _a.slice(1).join(':')];
+				}
+				return _a.map(s => s.trim());
+			});
+			return a;
+		}
+	}catch(err){console.log(err);}	
+}
+
+function validate(value, key, el){
 	switch(key){
 		case 'title':
-			if(!value) value = fstr.substring(0, fstr.lastIndexOf('.'));		
+			if(!value) value = el.name.substring(0, el.name.lastIndexOf('.'));		
 		break;
 		case 'linkmode':
 			if(!proto.linkmode.includes(value)){
 				console.log('unrecognized pragma value:', 'linkmode :', value, '\n');
 				value = 'title';
+			}
+			if(value === 'static-max' || value === 'expand'){
+				let name = el.name[0].toUpperCase()+el.name.substring(1).replace('.','_');
+				el.import = [name, el.path];
 			}
 		break;
 		case 'date':
@@ -100,15 +122,29 @@ function initlists(path){
 	return a.filter(e => (e.name.split('.')[1]||'').toLowerCase()!= 'list');
 }
 
-function buildStr(liststr){
+function importStr(imports){
+	let str = ''
+	for(let a of imports){
+		str += `import ${a[0]} from '${a[1]}';\n`;
+	}
+	return str;	
+}
+
+function buildStr(liststr, importstr){
 	let str =''; 
 	let components = path.resolve('/src/components');
 	str += 'import React from \'react\';\nimport {Link} from \'raviger\';\n';
 	str += `import List from \'${components}/wob-components.js\';\n`;
-	str += 'const posts = '+liststr+';\n';
-	str += 'export default function f(props){\n';
-	str += 'return(<List list={posts} category={props.category}/>);\n}\n'
+	str += importstr || '';
+	str += '\nconst posts = '+liststr+';\n';
+	str += '\nexport default function f(props){\n';
+	str += '    return(<List list={posts} category={props.category}/>);\n}\n'
 	return str;
+}
+
+function unquoteImport(str){
+	let reg = /(?<="import"\s*?:\s*?)"(.*)"(>?,|\n)/gm;
+	return str.replace(reg, s => s.replaceAll('"',''))
 }
 
 async function writeIndex(filepath, basepath){
@@ -117,19 +153,28 @@ async function writeIndex(filepath, basepath){
 	let destname = destpath.substring(destpath.lastIndexOf('/')+1);
 	let list = initlists(srcpath);
 	list = list.filter(el=>el.name != destname && (el.name.split('.')[0]||'').toLowerCase()!= 'index');
+	let imports = [];
 	for(let el of list){
-		el = Object.assign(el, await getPragma(el.path));
+		el = Object.assign(el, await getPragma(el));
 		el.route = el.path.substring(el.path.indexOf(basepath)+basepath.length);
 		el.route = el.route.substring(0,el.route.lastIndexOf('.'));
 		let d = parseDate(el.date);
 		if(d.err) console.log(el.title, d.err);
 		el.timecode = d.epoch || 0;
 		delete el.path;
+		if(el.import){
+			imports.push(el.import);
+			el.import = el.import[0];
+		}
 	}
 	list.sort(sortList);
 	overrideIndices(list);
+	// let a = await getOverride(filepath);
+	// if(a) console.log(a)
 	let str = JSON.stringify(list, null, 4);
-	let s = buildStr(str);
+	let istr = importStr(imports);
+	let s = buildStr(str, istr);
+	if(imports.length) s = unquoteImport(s);
 	try{
 		await fs.promises.writeFile(destpath, s);
 		console.log('wrote:', destpath, '\n');

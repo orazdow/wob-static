@@ -8,6 +8,7 @@ body{
 	line-height: 1.5;
 	color: #000000;
 	font-family: Helvetica,Arial,sans-serif;
+	width: 100vw;
 }
 .main-view{
 	z-index: 1;	
@@ -35,7 +36,15 @@ body{
 	padding: 2em;
     margin-left: 28%;
     margin-right: 29%;
-
+}
+   // static-max view
+li .markdown-content{
+	margin: auto;
+	padding: 0em;
+	// max-width: 35rem;
+	// padding: 2em;
+    // margin-left: 28%;
+    // margin-right: 29%;
 }
 
 .markdown-content pre{
@@ -160,6 +169,10 @@ li.post-max{
     padding-bottom: 5px;
     padding-top: 5px;
     /*margin: 7px;*/ 
+}
+.post-min-static{
+    padding-bottom: 5px;
+    padding-top: 5px;
 }
 .post-min:hover{
     cursor: pointer;
