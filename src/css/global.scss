@@ -8,7 +8,7 @@ body{
 	line-height: 1.5;
 	color: #000000;
 	font-family: Helvetica,Arial,sans-serif;
-	// width: 100vw;
+	// max-width: 98vw;
 }
 .main-view{
 	z-index: 1;	
@@ -20,7 +20,6 @@ body{
 
 .center{
 	display: block;
-	width: 100%;
 	margin: auto;
 }
 
@@ -30,6 +29,25 @@ body{
 	text-align: center;
 }
 
+.center ul{
+	max-width: 50%;
+}
+
+.center-template{
+	margin-left: 28%;
+	margin-right: 28%;
+	padding: 21px;
+	max-width: 50%;
+}
+
+.main-template{
+	max-width: 50%;
+	margin-left: 28.4%;
+	margin-right: 31%;
+	padding: 21px;
+	margin-top: 31px;
+}
+
 .markdown-content{
 	margin: auto;
 	max-width: 35rem;
@@ -37,14 +55,22 @@ body{
     margin-left: 28%;
     margin-right: 29%;
 }
+
+.main-template .markdown-content{
+	margin: auto;
+	max-width: 100rem;
+	padding: 0em;
+    margin-left: 0em;
+    margin-right: 0em;
+    border-bottom: 1px dotted black;
+    padding: 5px;
+}
    // static-max view
 li .markdown-content{
 	margin: auto;
 	padding: 0em;
 	// max-width: 35rem;
 	// padding: 2em;
-    // margin-left: 28%;
-    // margin-right: 29%;
 }
 
 .markdown-content pre{
@@ -64,24 +90,29 @@ li .markdown-content{
 	text-decoration: underline;
 }
 
-.center-margin{
-	margin-left: 28%;
-	margin-right: 28%;
-	padding: 21px;
-}
-
 .menu{
 	width: 100%;
 	display: inline-block;
-	// border: 1px solid black;
-
+	margin-bottom: 2.5em;
+	// max-height: 2em;
+	// overflow: hidden;
 }
 
-.menu > a{
+.menu a{
 	margin-right: 30px;
 	color: #505050;
-	// margin-right: 30px;
-	// margin-left: 30px;
+	display: inline-block;
+}
+.menu a:last-child{
+	margin-right: 0px;
+}
+
+.gh-logo{
+    background-size: 22px 22px;
+    margin: 0px;
+    width: 22px;
+    height: 22px;
+  	content: url(#{$imgpath}/github.svg);
 }
 
 .menu-title{
@@ -94,11 +125,18 @@ li .markdown-content{
 	font-size: 18px;
 }
 
+.menu-sel{
+	text-decoration-line: underline;
+}
+
 .sidemenu{
 	float: left;
 	padding-left:8px;
 	padding-top:8px;
+	position: absolute;
+	left: 8px;
 }
+
 .sidemenu > li{
 	width: 20px;
 }
@@ -113,15 +151,19 @@ a strong{
 }
 
 a:hover{
-  color: blue;
+  // color: blue;
   text-decoration: underline;
+}
+
+img {
+  max-width: 100%;
 }
 
 ul{
     padding: 0px;
-    width: 54vw;
+    width: 100%;
     margin: auto;
-    padding-top: 3em;
+    padding-top: 2em;
 }
 
 li{

@@ -27,9 +27,10 @@ export default function F(props){
 		<div className="center">
 		<p> F </p>
 		<hr/>
-		<MenuRouter basepath='/f' routes={routes} links={links}/>
+		<MenuRouter basepath='/f' routes={routes} links={links} className="center"/>
 		<hr/>
 		<p><Link href='/'>back</Link></p>
+		
 		</div>
 	);
 }
