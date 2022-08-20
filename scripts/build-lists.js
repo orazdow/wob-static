@@ -37,6 +37,7 @@ const proto = {
 	keywords: ["a", "b", "c"]
 };
 
+const replaceUnderscore = true;
 
 async function getPragma(el){
 	let str = await fs.promises.readFile(el.path, 'utf8');
@@ -69,12 +70,19 @@ async function getPragma(el){
 	return o;
 }
 
-async function getOverride(path){
+async function getListParams(path){
 	try{
 		let str = await fs.promises.readFile(path, 'utf8');
-		let m = str.match(/(?<=@override)(.+?)(?=\*\/)/gsmi);
-		if(m){
-			let a = m[0].split('\n').filter(s => s.includes(':'));
+		//@template
+		let m_t = str.match(/(?<=@template)(.+?)(?=\*\/)/gsmi);
+		if(m_t && m_t[0]){
+			return `\n{/* @template ${m_t[0]} */}\n`;
+		}
+		/*
+		//@override
+		let m_o = str.match(/(?<=@override)(.+?)(?=\*\/)/gsmi);
+		if(m_o){
+			let a = m_o[0].split('\n').filter(s => s.includes(':'));
 			a = a.map(s => s.replace(/[\x00-\x1F\x7F]/, ''));
 			a = a.map((s)=>{
 				let _a = s.split(':');
@@ -85,13 +93,17 @@ async function getOverride(path){
 			});
 			return a;
 		}
+		*/
 	}catch(err){console.log(err);}	
 }
 
 function validate(value, key, el){
 	switch(key){
 		case 'title':
-			if(!value) value = el.name.substring(0, el.name.lastIndexOf('.'));		
+			if(!value){
+				value = el.name.substring(0, el.name.lastIndexOf('.'));
+				if(replaceUnderscore) value = value.replaceAll('_', ' ');
+			} 		
 		break;
 		case 'linkmode':
 			if(!proto.linkmode.includes(value)){
@@ -169,10 +181,9 @@ async function writeIndex(filepath, basepath){
 	}
 	list.sort(sortList);
 	overrideIndices(list);
-	// let a = await getOverride(filepath);
-	// if(a) console.log(a)
+	let tmp = await getListParams(filepath);
 	let str = JSON.stringify(list, null, 4);
-	let istr = importStr(imports);
+	let istr = importStr(imports) + (tmp||'');
 	let s = buildStr(str, istr);
 	if(imports.length) s = unquoteImport(s);
 	try{

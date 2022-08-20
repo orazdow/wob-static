@@ -1,16 +1,3 @@
-
-	{/*
-
-		@pragma
-
-		title: PortAudio Wrapper
-		linkmode: title
-		date: 2019/07/05 2:15pm
-		keywords: ["a", "b"]
-
-	*/}
-
-
 # PortAudio Wrapper
 
 C++ wrapper for PortAudio
@@ -18,35 +5,34 @@ C++ wrapper for PortAudio
 Provides a simple interface to PortAudio's callback API for reading and writing to audio devices. 
 
 ---
-
+```
 ### Basic Example:
 
-```
-#include "pa.h"
-#include "math.h"
-#define TWO_PI 6.2831853
+    #include "pa.h"
+    #include "math.h"
+    #define TWO_PI 6.2831853
 
-double phase = 0, step = TWO_PI*440/44100.0;
+    double phase = 0, step = TWO_PI*440/44100.0;
 
-void paFunc(const float* in, float* out, long frames, void* data){    
-    // play a 440Hz sine tone
-    for(int i = 0; i < frames; i++ ){
-         *out++ = sin(phase)*0.5;
-         phase += step;
-     }
-}
+    void paFunc(const float* in, float* out, long frames, void* data){    
+        // play a 440Hz sine tone
+        for(int i = 0; i < frames; i++ ){
+             *out++ = sin(phase)*0.5;
+             phase += step;
+         }
+    }
 
-int main() {
-    // use default parameters, not passing any data
-    Pa a(paFunc, NULL);
-    // start stream
-    a.start(Pa::waitForKey);
-    return 0;
-}
+    int main() {
+        // use default parameters, not passing any data
+        Pa a(paFunc, NULL);
+        // start stream
+        a.start(Pa::waitForKey);
+        return 0;
+    }
     
-```
-### Usage:
 
+### Usage:
+```
 **Requirements:**
 
 PortAudio can be obtained [here](http://www.portaudio.com/).
@@ -55,13 +41,14 @@ PortAudio can be obtained [here](http://www.portaudio.com/).
 **Initializing:**
 
 Define a callback where audio processing will occur and pass it as the constructor's first argument. The callback can be a simplified type: 
- ```   
-void paCallback(const float* inputBuffer, float* ouputBuffer, long framesPerBuffer, void* userData){...}
+```    
+    void paCallback(const float* inputBuffer, float* ouputBuffer, long framesPerBuffer, void* userData){...}
 ```    
 or have the full signature specified by PortAudio  
 ```
-int paCallback(const void* inputBuffer, void* outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags, void* userData){...}
- ```           
+    int paCallback(const void* inputBuffer, void* outputBuffer, unsigned long framesPerBuffer, 
+            const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags, void* userData){...}
+```            
 The wrapper's constructor can either take 2 arguments:&nbsp; the callback and a pointer for passing user data (see passing data):
 
 `Pa a(callback, &data);` 
@@ -81,13 +68,11 @@ Calling `start()` will start the stream.
 
 For convenience, there are four  enum values that can be passed  to `start()` to control the lifetime of the stream:
 
- `Pa::dontTerminate` &nbsp;(_default_) Starts the stream only. &nbsp;Will stop if `stop()` is called, or the program exits.
+- `Pa::dontTerminate` &nbsp;(_default_) Starts the stream only. &nbsp;Will stop if `stop()` is called, or the program exits.
 
- `Pa::wait` &nbsp;Keeps the stream alive in a while loop, can be stopped from another thread.
-
- `Pa::sleep`&nbsp; Keeps the stream alive for a specified number of milliseconds and then stops the stream. `setSleepTime(millis)` can be called to set the time, or a time in milliseconds can be passed directly i.e `start(5000)`
-
- `Pa::waitForKey` &nbsp;Keeps the stream alive until a key is entered and then stops the stream.
+- `Pa::wait` &nbsp;Keeps the stream alive in a while loop, can be stopped from another thread.
+- `Pa::sleep`&nbsp; Keeps the stream alive for a specified number of milliseconds and then stops the stream. `setSleepTime(millis)` can be called to set the time, or a time in milliseconds can be passed directly i.e `start(5000)`
+- `Pa::waitForKey` &nbsp;Keeps the stream alive until a key is entered and then stops the stream.
 
 `stop()` &nbsp;stops the stream. &nbsp;`stop(true)` &nbsp;also closes the stream, which frees some additional resources.
 
@@ -100,39 +85,39 @@ PortAudio allows for user data  to be passed to the audio callback. This can be 
 
 To pass data to the callback, pass a data pointer to the constructor, and recast the data argument in your callback to your data type. For example:
 ```
-void paFunc(const float* in, float* out, long frames, void* data){    
-    Osc* o = (Osc*)data;
-    for(long i = 0; i < frames; i++ ){
-         *out++ = o->out();
-     }
-}
-    
-Osc osc(440);
-Pa a(paFunc, &osc);
-
+    void paFunc(const float* in, float* out, long frames, void* data){    
+        Osc* o = (Osc*)data;
+        for(long i = 0; i < frames; i++ ){
+             *out++ = o->out();
+         }
+    }
+        
+    Osc osc(440);
+    Pa a(paFunc, &osc);
 ```
+
 PortAudio provides the option to register a callback that will be called when a stream has stopped playing which takes the user data as an argument. This can be used to delete dynamically allocated data, and can be set with `setFinishedCallBack()`.  
 An example  might look like:
 ```
-void streamFinished(void* data){
-    Osc* o = (Osc*)data;
-    delete o;
-}
+    void streamFinished(void* data){
+        Osc* o = (Osc*)data;
+        delete o;
+    }
 
-int main() {
-    Osc* osc = new Osc(440);
-    Pa a(paFunc, osc);
-    a.setFinishedCallBack(streamFinished);
-    a.start(Pa::waitForKey);
-    return 0;
-}
+    int main() {
+        Osc* osc = new Osc(440);
+        Pa a(paFunc, osc);
+        a.setFinishedCallBack(streamFinished);
+        a.start(Pa::waitForKey);
+        return 0;
+    }
 ```    
 Alternatively, you can pass the data as a shared_ptr, which will delete resources automatically:
 ```
-Osc* osc = new Osc(440);
-Pa a(paFunc, std::shared_ptr<Osc>(osc));
-```
+    Osc* osc = new Osc(440);
+    Pa a(paFunc, std::shared_ptr<Osc>(osc));
 
+```
 **Querying / setting audio devices:**
 
 `listDevices()` prints a list of available input and output devices, sorted by device ID. 

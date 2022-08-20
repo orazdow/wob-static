@@ -11,15 +11,15 @@ export default function Menu({links, l='', r='', u}){
 	const items = links.map((el, i)=>{
 		let name = i == sel ? l+el.name+r: sp+el.name+sp;
 		let cl = i == sel ? 'menu-sub'+ul: 'menu-sub';
+		let cl2 = ' '+el.class||'';
+
 		return el ? i == 0 ? 
-			<Link href={el.path} key={'m'+i} onClick={cb}>
-			<span data-val={i} className={'menu-title'}>{el.name}
-			</span>
+			<Link href={el.path} key={'m'+i} data-val={i} onClick={cb} className={'menu-title'+cl2}>
+			{el.name}
 			</Link> 
 			:
-			<Link href={el.path} key={'m'+i} onClick={cb}>
-			<span data-val={i} className={cl}>{name}
-			</span>
+			<Link href={el.path} key={'m'+i} data-val={i} onClick={cb} className={cl+cl2}>
+			{name}
 			</Link>: null;
 	});
 
