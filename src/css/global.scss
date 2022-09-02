@@ -46,6 +46,10 @@ body{
     border-bottom: 1px dotted black;
     padding: 5px;
 }
+
+.main-template .markdown-content p{
+	margin-top: .5em;
+}
    // static-max view
 li .markdown-content{
 	margin: auto;
@@ -80,22 +84,22 @@ li .markdown-content{
 .main-template{
 	// margin: auto;
 	max-width: 50%;
-	margin-left: 28.4%;
+	margin-left: 28.5%;
 	margin-right: 31%;
 	padding: 21px;
-	margin-top: 31px;
+	margin-top: 36px;
 }
 
 .menu{
 	width: 100%;
 	display: inline-block;
-	margin-bottom: 2.5em;
+	margin-bottom: 2.6em;
 	// max-height: 2em;
 	// overflow: hidden;
 }
 
 .menu a{
-	margin-right: 30px;
+	margin-right: 27px;
 	color: #505050;
 	display: inline-block;
 }
