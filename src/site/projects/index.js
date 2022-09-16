@@ -6,19 +6,11 @@ import List from '/src/components/wob-components.js';
 
 const posts = [
     {
-        "name": "Portaudio_Wrapper.md",
-        "title": "Portaudio Wrapper",
+        "name": "Delaunay_Triangulation.mdx",
+        "title": "Delaunay Triangulation",
         "linkmode": "title",
         "min": true,
-        "route": "/projects/Portaudio_Wrapper",
-        "timecode": 0
-    },
-    {
-        "name": "soundlib.md",
-        "title": "soundlib",
-        "linkmode": "title",
-        "min": true,
-        "route": "/projects/soundlib",
+        "route": "/projects/Delaunay_Triangulation",
         "timecode": 0
     }
 ];
