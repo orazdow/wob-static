@@ -3,7 +3,6 @@ const fs = require('node:fs');
 const path = require('node:path');
 const {parseDate, sortList, overrideIndices} = require('./parsedate.js');
 
-
 /*
 	@pragma
 
@@ -26,7 +25,6 @@ const {parseDate, sortList, overrideIndices} = require('./parsedate.js');
 	}
 
 */
-
 
 const proto = {
 	title: '',
@@ -66,35 +64,24 @@ async function getPragma(el){
 			}
 		}
 	}
+	m = str.match(/(?<=@route)(.+?)(?=\*\/)/gsmi);
+	if(m && m[0]){
+		let s = m[0].trim();
+		el.endpoint = s;
+	}
 	o.min = o.linkmode != 'static-max';
 	return o;
 }
 
 async function getListParams(path){
+	let obj = {template: '', pragma: ''};
 	try{
 		let str = await fs.promises.readFile(path, 'utf8');
-		//@template
 		let m_t = str.match(/(?<=@template)(.+?)(?=\*\/)/gsmi);
-		if(m_t && m_t[0]){
-			return `\n{/* @template ${m_t[0]} */}\n`;
-		}
-		/*
-		//@override
-		let m_o = str.match(/(?<=@override)(.+?)(?=\*\/)/gsmi);
-		if(m_o){
-			let a = m_o[0].split('\n').filter(s => s.includes(':'));
-			a = a.map(s => s.replace(/[\x00-\x1F\x7F]/, ''));
-			a = a.map((s)=>{
-				let _a = s.split(':');
-				if(_a.length > 2){
-					_a = [_a[0], _a.slice(1).join(':')];
-				}
-				return _a.map(s => s.trim());
-			});
-			return a;
-		}
-		*/
+		if(m_t && m_t[0])
+			obj.template = `\n{/* @template ${m_t[0]} */}\n`;
 	}catch(err){console.log(err);}	
+	return obj;
 }
 
 function validate(value, key, el){
@@ -131,6 +118,7 @@ function validate(value, key, el){
 function initlists(path){
 	let a = dirTree(path).children;
 	a = a.filter(e => e.name.endsWith('.js')||e.name.endsWith('.mdx')||e.name.endsWith('.md'));
+	a = a.filter( e => !(e.name.substring(0, e.name.lastIndexOf('.')).search('.component') > 0))
 	return a.filter(e => (e.name.split('.')[1]||'').toLowerCase()!= 'list');
 }
 
@@ -168,8 +156,13 @@ async function writeIndex(filepath, basepath){
 	let imports = [];
 	for(let el of list){
 		el = Object.assign(el, await getPragma(el));
-		el.route = el.path.substring(el.path.indexOf(basepath)+basepath.length);
-		el.route = el.route.substring(0,el.route.lastIndexOf('.'));
+		if(el.endpoint){
+			el.route = el.endpoint;
+			delete el.endpoint;
+		}else{
+			el.route = el.path.substring(el.path.indexOf(basepath)+basepath.length);
+			el.route = el.route.substring(0,el.route.lastIndexOf('.'));
+		}
 		let d = parseDate(el.date);
 		if(d.err) console.log(el.title, d.err);
 		el.timecode = d.epoch || 0;
@@ -179,11 +172,12 @@ async function writeIndex(filepath, basepath){
 			el.import = el.import[0];
 		}
 	}
+	list = list.filter(el=> el.route != 'none');
 	list.sort(sortList);
 	overrideIndices(list);
-	let tmp = await getListParams(filepath);
+	let params = await getListParams(filepath);
 	let str = JSON.stringify(list, null, 4);
-	let istr = importStr(imports) + (tmp||'');
+	let istr = importStr(imports) + (params.template);
 	let s = buildStr(str, istr);
 	if(imports.length) s = unquoteImport(s);
 	try{

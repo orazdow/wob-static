@@ -2,21 +2,12 @@ const dirTree = require("directory-tree");
 const path = require('node:path');
 const fs = require('node:fs');
 
-function dfs(arr, list, cb){
-	for(let el of arr){		
-		cb(el);
-		if(el.children)
-			dfs(el.children, list, cb);
-	}
-}
-
 function routeAsset(el, baseroute){
 	if(el.name.endsWith('.js') || el.name.endsWith('.md') || el.name.endsWith('.mdx')){
 		let srcpath = path.resolve(el.path);
 		let name = el.name.replace(/(.js)|(.mdx)|(.md)/ig, '');
-		if(name.substring(name.lastIndexOf('.')+1).toLowerCase() == 'list'){
-			return; // ignore __.list.js
-		}
+		if(name.substring(name.lastIndexOf('.')+1).toLowerCase() == 'list' || 
+			name.search('.component') >= 0) return; // ignore __.list.js, __.component.js
 		name = name[0].toUpperCase()+name.substring(1).replace('.', '_');
 		let route = el.path.substring(el.path.indexOf(baseroute)+baseroute.length);
 		route = route.substring(0, route.lastIndexOf('.'));
@@ -29,11 +20,11 @@ function routeAsset(el, baseroute){
 		if(name && route){
 			return {name: name, route: route, path: srcpath};
 		}
-	}
+	}else if(el.name == '.component') return {}; // .component file to skip dir
 	return;	
 }
 
-function check(list){
+function checkDuplicates(list){
 	let o = {};
 	let a = [];
 	let i = 0;
@@ -87,10 +78,10 @@ async function checkTemplates(list, baseroute){
 				el.template = templates[s].name;
 			}
 		}
-		m = str.match(/(?<=@endpoint)(.+?)(?=\*\/)/gsmi);
+		m = str.match(/(?<=@route)(.+?)(?=\*\/)/gsmi);
 		if(m && m[0]){
 			let s = m[0].trim();
-			console.log('\n@endpoint: overriding route', el.route+' -> '+s);
+			console.log('\n@route: overriding', el.route+' -> '+s);
 			el.route = s;
 		}
 	}
@@ -116,6 +107,14 @@ function importStr(list){
 	return str;
 }
 
+function dfs(arr, list, cb){
+	cb(arr);
+	for(let el of arr){		
+		if(el.children)
+			dfs(el.children, list, cb);
+	}
+}
+
 async function buildRoutes(baseroute){
 	let list = [];
 	let tree = dirTree(baseroute);
@@ -123,15 +122,25 @@ async function buildRoutes(baseroute){
 		console.log('Error: could not resolve', baseroute, '\n');
 		return;
 	}
-	dfs(tree.children, list, (el)=>{
-		let e = routeAsset(el, baseroute);
-		if(e)list.push(e);
+	dfs(tree.children, list, (arr)=>{
+		let dir = [], skip = false;
+		for(let el of arr){
+			let e = routeAsset(el, baseroute);
+			if(e){
+				if(e.name) dir.push(e);
+				else skip = true;
+			}
+		}
+		if(!skip) list.push(...dir);
 	});
-	let a = check(list);
+
+	let a = checkDuplicates(list);
+	let templates = await checkTemplates(a, baseroute);	
+	a = a.filter(el => el.route != 'none')
 	let import_str = importStr(a);
-	let templates = await checkTemplates(a, baseroute);
 	if (templates) import_str += importStr(templates);
 	let route_str = routeStr(a);
+
 	let str = 'import React from \'react\';\n\n'+import_str+'\n'+route_str+'\n\nexport default routes;';
 	try{
 		await fs.promises.writeFile("./src/routes.js", str);

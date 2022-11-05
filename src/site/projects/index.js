@@ -12,6 +12,14 @@ const posts = [
         "min": true,
         "route": "/projects/Delaunay_Triangulation",
         "timecode": 0
+    },
+    {
+        "name": "line_to_model.mdx",
+        "title": "Line to Model",
+        "linkmode": "title",
+        "min": true,
+        "route": "/projects/line_to_model",
+        "timecode": 0
     }
 ];
 
