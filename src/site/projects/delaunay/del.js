@@ -3,12 +3,12 @@ import Perlin from './p5noise.js';
 import Delaunay from './delaunay.js';
 
 let ww, wh, ctx; 
-let ID, selected, hdots;
+let ID, selected, hdots, p;
 let loop = true, add = true, mousedown = false, view = 1;
 let nodes = [];
 let a = 0, b = 0;
 const del = Delaunay;
-const mouse = {x: 0, y: 0};
+const mouse = {x: 0, y: 0}, rect = {x: 0, y: 0};
 const num = 30;
 
 function draw(){ 
@@ -38,13 +38,17 @@ function init(canvas, width, height){
 	canvas.width = ww;
 	canvas.height = wh;
 	canvas.style.backgroundColor = '#5c5c5c';
+	let r = canvas.getBoundingClientRect();
+	rect.x = Math.floor(r.x);
+	rect.y = Math.floor(r.y);
+	p = document.querySelector('#msg');
+	p.innerHTML = 'press space to change view';
 	del.init(ww, wh);
 	Perlin.noiseDetail(5, 0.3);	
 	addEventListener('keydown', _onkeydown);
 	canvas.addEventListener('mousedown', _onmousedown);
 	canvas.addEventListener('mouseup', _onmouseup);
-	canvas.addEventListener('mousemove', _onmousemove);
-	// addEventListener('popstate', ()=>{leave(canvas)});
+	addEventListener('mousemove', _onmousemove);
 	start();
 }
 
@@ -53,7 +57,7 @@ function leave(canvas){
 	removeEventListener('keydown', _onkeydown);
 	canvas.removeEventListener('mousedown', _onmousedown);
 	canvas.removeEventListener('mouseup', _onmouseup);
-	canvas.removeEventListener('mousemove', _onmousemove);
+	removeEventListener('mousemove', _onmousemove);
 }
 
 function lerp(a, b, n){
@@ -73,14 +77,14 @@ function _onkeydown(e){
 				nodes = [];
 				for(let i = 0; i < num; i++) nodes[i] = {x:0, y:0, vx: 0, vy: 0};
 				ID = window.requestAnimationFrame(draw);
-				// p.innerHTML = 'press space to change view';
+				p.innerHTML = 'press space to change view';
 				loop = true;
 			}
 		}
 		if(view > 3){
 			if(loop){
 				window.cancelAnimationFrame(ID);
-				// p.innerHTML = 'press space to change view (click to add points or drag to move)';
+				p.innerHTML = 'press space to change view (click to add points or drag to move)';
 				loop = false;
 				del.reset();
 				nodes = [];
@@ -92,8 +96,9 @@ function _onkeydown(e){
 }
 
 function _onmousemove(e){ 
-	mouse.x = e.clientX - e.target.offsetLeft;
-	mouse.y = e.clientY - e.target.offsetTop;
+	mouse.x = e.clientX - rect.x;
+	mouse.y = e.clientY - rect.y;
+	console.log(mouse)
 	if(mousedown && view > 3){ 
 	    hdots = ((view == 4 || view == 7) && nodes.length < 3) ? nodes.slice(0, 2) : null;
 		if(!add){
@@ -149,11 +154,14 @@ function Disp({width = 600, height = 500}){
 
 	return useMemo(() => {
 		return(
+			<div>
 			<canvas
 				width={width}
 				height={height}
 				ref={canvasRef}
 			/>
+			<div id="msg" style={{fontSize: '15px'}}/>
+			</div>
 		);
 	}, [canvasRef]);
 }

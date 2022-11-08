@@ -5,7 +5,7 @@ $pre-bkcolor: #f9f9f9;
 
 body{
 	background-color:$bkcolor;
-	line-height: 1.5;
+	/*line-height: 1.5;*/
 	color: #000000;
 	font-family: Helvetica,Arial,sans-serif;
 	// max-width: 98vw;
@@ -77,10 +77,6 @@ li .markdown-content{
 	text-decoration: underline;
 }
 
-.center-margin{
-
-}
-
 .main-template{
 	// margin: auto;
 	max-width: 50%;
@@ -136,6 +132,11 @@ li .markdown-content{
 }
 .sidemenu > li{
 	width: 20px;
+}
+
+p{
+	margin-top: .5em;
+	margin-bottom: 1em;
 }
 
 a{
