@@ -20,6 +20,22 @@ const posts = [
         "min": true,
         "route": "/projects/line_to_model",
         "timecode": 0
+    },
+    {
+        "name": "Portaudio_Wrapper.mdx",
+        "title": "Portaudio Wrapper",
+        "linkmode": "title",
+        "min": true,
+        "route": "/projects/Portaudio_Wrapper",
+        "timecode": 0
+    },
+    {
+        "name": "soundlib.mdx",
+        "title": "soundlib",
+        "linkmode": "title",
+        "min": true,
+        "route": "/projects/soundlib",
+        "timecode": 0
     }
 ];
 

@@ -5,13 +5,13 @@ const mouse = {x:0,y:0};
 const obj = {v: null, i: null};
 let rot, translate, proj, colors, scene, ww, wh, ctx, id, rect;
 
-async function init(canvas, width, height){
+async function init(canvas, width, height, path, rotate){
 	ww = width, wh = height;
 	canvas.width = ww, canvas.height = wh;
 	canvas.style.backgroundColor = '#5c5c5c';
 	ctx = canvas.getContext('2d');
 	rect = canvas.getBoundingClientRect();
-	const lines = (await import("./lines.js")).default;
+	const lines = (await import(`${path}`)).default;
 	obj.v = lines.v;
 	obj.i = lines.e;
 	// for(let v of obj.v){
@@ -24,6 +24,7 @@ async function init(canvas, width, height){
 	proj = g.create_proj(.7, .4 , .2);
 	colors = { bkgd: 'darkslateblue', fill: 'darkslateblue', stroke: 'black' };
 	scene = g.create_canvas_scene(ctx, ww, wh, colors, obj.v, obj.i, null, translate, null, proj);
+	scene.r_mat = rotate ? rot : 0;
 	addEventListener('mousemove', onmousemove);
 	addEventListener('touchmove', ontouchmove);
 	addEventListener('keydown', onkeydown);
@@ -59,12 +60,12 @@ function onkeydown(e){
 	} 
 }
 
-export default function Disp({width, height}){
+export default function Disp({width=500, height=500, path='./lines.js', rotate=0, style}){
 	const canvasRef = useRef();
 	useEffect(()=>{
 		if(canvasRef.current){
 			const canvas = canvasRef.current;
-			init(canvas, width, height);
+			init(canvas, width, height, path, rotate);
 			return leave;
 		}
 	}, [canvasRef]);
@@ -75,6 +76,7 @@ export default function Disp({width, height}){
 				width={width}
 				height={height}
 				ref={canvasRef}
+				style={style}
 			/>
 		);
 

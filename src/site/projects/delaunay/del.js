@@ -45,19 +45,19 @@ function init(canvas, width, height){
 	p.innerHTML = 'press space to change view';
 	del.init(ww, wh);
 	Perlin.noiseDetail(5, 0.3);	
-	addEventListener('keydown', _onkeydown);
-	canvas.addEventListener('mousedown', _onmousedown);
-	canvas.addEventListener('mouseup', _onmouseup);
-	addEventListener('mousemove', _onmousemove);
+	addEventListener('keydown', onkeydown);
+	canvas.addEventListener('mousedown', onmousedown);
+	canvas.addEventListener('mouseup', onmouseup);
+	addEventListener('mousemove', onmousemove);
 	start();
 }
 
 function leave(canvas){ 
 	window.cancelAnimationFrame(ID);
-	removeEventListener('keydown', _onkeydown);
-	canvas.removeEventListener('mousedown', _onmousedown);
-	canvas.removeEventListener('mouseup', _onmouseup);
-	removeEventListener('mousemove', _onmousemove);
+	removeEventListener('keydown', onkeydown);
+	canvas.removeEventListener('mousedown', onmousedown);
+	canvas.removeEventListener('mouseup', onmouseup);
+	removeEventListener('mousemove', onmousemove);
 }
 
 function lerp(a, b, n){
@@ -68,7 +68,7 @@ function dist(ax, ay, bx, by){
 	return Math.sqrt((ax-bx)*(ax-bx)+(ay-by)*(ay-by));
 }
 
-function _onkeydown(e){ 
+function onkeydown(e){ 
 	if(e.key === ' '){
 		e.preventDefault();
 		view = ++view % 8;
@@ -95,10 +95,10 @@ function _onkeydown(e){
 	}
 }
 
-function _onmousemove(e){ 
+function onmousemove(e){ 
 	mouse.x = e.clientX - rect.x;
 	mouse.y = e.clientY - rect.y;
-	console.log(mouse)
+
 	if(mousedown && view > 3){ 
 	    hdots = ((view == 4 || view == 7) && nodes.length < 3) ? nodes.slice(0, 2) : null;
 		if(!add){
@@ -113,7 +113,7 @@ function _onmousemove(e){
 	}
 }
 
-function _onmousedown(e){
+function onmousedown(e){
 	mousedown = true;
 	if(view > 3){
 		add = true;
@@ -136,11 +136,11 @@ function _onmousedown(e){
 	}
 }
 
-function _onmouseup(e){
+function onmouseup(e){
 	mousedown = false;
 }
 
-function Disp({width = 600, height = 500}){
+function Disp({width = 600, height = 500, style}){
 	const canvasRef = useRef();
 	useEffect(()=>{
 		if(canvasRef.current){
@@ -159,6 +159,7 @@ function Disp({width = 600, height = 500}){
 				width={width}
 				height={height}
 				ref={canvasRef}
+				style={style}
 			/>
 			<div id="msg" style={{fontSize: '15px'}}/>
 			</div>
