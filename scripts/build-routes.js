@@ -12,7 +12,7 @@ function dfs(arr, list, cb){
 
 function routeAsset(el, baseroute){
 	if(el.name.endsWith('.js') || el.name.endsWith('.md') || el.name.endsWith('.mdx')){
-		let srcpath = path.resolve(el.path);
+		let srcpath = path.resolve(el.path).replaceAll(path.sep, '/');
 		let name = el.name.replace(/(.js)|(.mdx)|(.md)/ig, '');
 		if(name.substring(name.lastIndexOf('.')+1).toLowerCase() == 'list'){
 			return; // ignore __.list.js
@@ -117,6 +117,7 @@ function importStr(list){
 }
 
 async function buildRoutes(baseroute){
+	baseroute = baseroute.replaceAll(path.sep, '/');
 	let list = [];
 	let tree = dirTree(baseroute);
 	if(!tree){
@@ -124,6 +125,7 @@ async function buildRoutes(baseroute){
 		return;
 	}
 	dfs(tree.children, list, (el)=>{
+		el.path = el.path.replaceAll(path.sep, '/');
 		let e = routeAsset(el, baseroute);
 		if(e)list.push(e);
 	});
