@@ -115,8 +115,9 @@ function validate(value, key, el){
 	return value;
 }
 
-function initlists(path){
-	let a = dirTree(path).children;
+function initlists(dirpath){
+	let a = dirTree(dirpath).children;
+	a.forEach((el)=>{ el.path = el.path.replaceAll(path.sep, '/')});
 	a = a.filter(e => e.name.endsWith('.js')||e.name.endsWith('.mdx')||e.name.endsWith('.md'));
 	a = a.filter( e => !(e.name.substring(0, e.name.lastIndexOf('.')).search('.component') > 0))
 	return a.filter(e => (e.name.split('.')[1]||'').toLowerCase()!= 'list');
@@ -132,7 +133,7 @@ function importStr(imports){
 
 function buildStr(liststr, importstr){
 	let str =''; 
-	let components = path.resolve('/src/components');
+	let components = path.resolve('src/components').replaceAll(path.sep, '/');
 	str += 'import React from \'react\';\nimport {Link} from \'raviger\';\n';
 	str += `import List from \'${components}/wob-components.js\';\n`;
 	str += importstr || '';
@@ -198,6 +199,7 @@ function dfs(arr, cb){
 }
 
 async function buildLists(basepath){
+	basepath = basepath.replaceAll(path.sep, '/');
 	let a = dirTree(basepath);
 	let listfiles = [];
 	if(!a){
@@ -205,6 +207,7 @@ async function buildLists(basepath){
 		return;
 	};
 	dfs(a.children, (el)=>{
+		el.path = el.path.replaceAll(path.sep, '/');
 		let s = el.name.split('.')[1];
 		if(s && s.toLowerCase() == 'list'){
 			listfiles.push(el.path);

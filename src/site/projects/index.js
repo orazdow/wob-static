@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from 'raviger';
-import List from '/src/components/wob-components.js';
+import List from 'C:/Users/ollie/Documents/projects/wob-static/src/components/wob-components.js';
 
 {/* @template  template.js  */}
 

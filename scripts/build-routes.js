@@ -4,7 +4,7 @@ const fs = require('node:fs');
 
 function routeAsset(el, baseroute){
 	if(el.name.endsWith('.js') || el.name.endsWith('.md') || el.name.endsWith('.mdx')){
-		let srcpath = path.resolve(el.path);
+		let srcpath = path.resolve(el.path).replaceAll(path.sep, '/');
 		let name = el.name.replace(/(.js)|(.mdx)|(.md)/ig, '');
 		if(name.substring(name.lastIndexOf('.')+1).toLowerCase() == 'list' || 
 			name.search('.component') >= 0) return; // ignore __.list.js, __.component.js
@@ -116,6 +116,7 @@ function dfs(arr, list, cb){
 }
 
 async function buildRoutes(baseroute){
+	baseroute = baseroute.replaceAll(path.sep, '/');
 	let list = [];
 	let tree = dirTree(baseroute);
 	if(!tree){
@@ -125,6 +126,7 @@ async function buildRoutes(baseroute){
 	dfs(tree.children, list, (arr)=>{
 		let dir = [], skip = false;
 		for(let el of arr){
+			el.path = el.path.replaceAll(path.sep, '/');
 			let e = routeAsset(el, baseroute);
 			if(e){
 				if(e.name) dir.push(e);
