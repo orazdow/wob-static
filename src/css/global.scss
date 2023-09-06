@@ -48,6 +48,16 @@ body{
     padding: 5px;
 }
 
+.main-template{
+	// margin: auto;
+	max-width: 50%;
+	margin-left: 28.5%;
+	margin-right: 31%;
+	padding: 21px;
+	// margin-top: 36px;
+    margin-top: 33px;
+}
+
 .main-template .markdown-content p{
 	margin-top: .5em;
 }
@@ -94,14 +104,6 @@ li .markdown-content{
 	text-decoration: underline;
 }
 
-.main-template{
-	// margin: auto;
-	max-width: 50%;
-	margin-left: 28.5%;
-	margin-right: 31%;
-	padding: 21px;
-	margin-top: 36px;
-}
 
 .menu{
 	width: 100%;

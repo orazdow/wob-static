@@ -27,6 +27,9 @@ module.exports = async (env, argv)=>{
         plugins: [
             // new webpack.ProvidePlugin({React: 'react'}),
             // new webpack.ProvidePlugin({Link: ['raviger', 'Link']})
+            new webpack.DefinePlugin({
+            '__REACT_DEVTOOLS_GLOBAL_HOOK__': '({ isDisabled: true })'
+            })
         ],
         optimization: {
             usedExports: true
